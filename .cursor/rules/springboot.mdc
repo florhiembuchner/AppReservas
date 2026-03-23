@@ -1,0 +1,42 @@
+---
+description: Java 25 and Spring Boot service standards for this project
+alwaysApply: true
+---
+
+# Spring Boot Java 25 Standards
+
+Apply these rules in all tasks for this repository.
+
+## Language and naming
+- Write class names, method names, attribute names, variables, constants, packages, and comments in English.
+- Use meaningful domain names (`ReservationService`, `CreateReservationRequest`), avoid abbreviations.
+- Follow Java naming conventions: `PascalCase` for classes, `camelCase` for methods/fields, `UPPER_SNAKE_CASE` for constants.
+
+## API and DTO conventions
+- Every public method must include up-to-date Javadoc with purpose, params, return value, and thrown exceptions.
+- Use Java `record` for DTOs (request/response and immutable transport models).
+- Keep controllers thin: validate input and delegate business logic to services.
+
+## Spring Boot architecture
+- Use layered architecture: Controller -> Service -> Repository.
+- Inject dependencies by constructor only (prefer `final` fields, no field injection).
+- Keep transactional boundaries in service layer with `@Transactional` when needed.
+- Use `@RestControllerAdvice` for centralized exception handling and consistent error responses.
+
+## Java 25 and code quality
+- Prefer immutability and small, focused classes/methods.
+- Use modern Java features when they improve readability and safety.
+- Validate inputs early and fail fast with explicit exceptions.
+- Add/maintain unit and integration tests for business logic and endpoints.
+
+## Expected project structure
+- `reservation-backend/src/main/java/.../config` -> Spring configuration and beans.
+- `reservation-backend/src/main/java/.../controller` -> REST controllers.
+- `reservation-backend/src/main/java/.../service` -> business use cases.
+- `reservation-backend/src/main/java/.../repository` -> Spring Data repositories.
+- `reservation-backend/src/main/java/.../entity` -> JPA entities.
+- `reservation-backend/src/main/java/.../dto` -> request/response DTOs as `record`.
+- `reservation-backend/src/main/java/.../mapper` -> entity/DTO mappings.
+- `reservation-backend/src/main/java/.../exception` -> domain and API exception handling.
+- `reservation-backend/src/main/resources` -> `application.properties`, SQL/migration resources.
+- `reservation-backend/src/test/java` -> unit and integration tests.
