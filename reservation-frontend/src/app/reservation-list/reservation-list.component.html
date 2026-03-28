@@ -1,0 +1,71 @@
+<section class="reservation-list">
+  <header class="reservation-list__header">
+    <h1>Reservas</h1>
+    <div class="reservation-list__actions">
+      <a routerLink="/nueva-reserva" class="btn btn--primary">Nueva reserva</a>
+      <button type="button" class="btn btn--secondary" (click)="loadReservations()" [disabled]="loading()">
+        Actualizar
+      </button>
+    </div>
+  </header>
+
+  @if (loading() && reservations().length === 0) {
+    <p class="reservation-list__state" role="status">Cargando reservas…</p>
+  }
+
+  @if (errorMessage(); as msg) {
+    <p class="reservation-list__error" role="alert">{{ msg }}</p>
+  }
+
+  @if (!loading() || reservations().length > 0) {
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Cliente</th>
+            <th scope="col">Fecha</th>
+            <th scope="col">Hora</th>
+            <th scope="col">Servicio</th>
+            <th scope="col">Estado</th>
+            <th scope="col">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of reservations(); track row.id) {
+            <tr>
+              <td>{{ row.id }}</td>
+              <td>{{ row.customerName }}</td>
+              <td>{{ row.date | date: 'mediumDate' }}</td>
+              <td>{{ row.time }}</td>
+              <td>{{ row.service }}</td>
+              <td>
+                <span class="badge" [class.badge--active]="row.status === ReservationStatus.ACTIVE" [class.badge--canceled]="row.status === ReservationStatus.CANCELED">
+                  {{ row.status }}
+                </span>
+              </td>
+              <td>
+                @if (row.status === ReservationStatus.ACTIVE) {
+                  <button
+                    type="button"
+                    class="btn btn--danger"
+                    (click)="onCancel(row.id)"
+                    [disabled]="cancelingId() === row.id"
+                  >
+                    {{ cancelingId() === row.id ? 'Cancelando…' : 'Cancelar' }}
+                  </button>
+                } @else {
+                  <span class="muted">—</span>
+                }
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="7" class="muted">No hay reservas.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</section>

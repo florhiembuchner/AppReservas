@@ -1,0 +1,26 @@
+---
+description: Angular frontend standards for reservation-frontend (services, HTTP, environments)
+globs: reservation-frontend/**/*.ts
+alwaysApply: false
+---
+
+# Angular (reservation-frontend)
+
+Apply when editing TypeScript in `reservation-frontend/`.
+
+## Structure
+- Place feature-neutral HTTP and API types under `src/app/services/` and `src/app/models/`.
+- Keep components thin; call services for backend access.
+
+## HTTP
+- Use `HttpClient` from `@angular/common/http` with `provideHttpClient()` in `app.config.ts`.
+- Do not hardcode backend URLs in services; read the base URL from `src/environments/environment` (`apiUrl`).
+
+## Environments
+- Define `apiUrl` and `production` in `environment.ts` (production build) and `environment.development.ts` (local `ng serve` via `fileReplacements` in `angular.json`).
+
+## Naming
+- Use English for code, types, and comments unless the product name is Spanish (e.g. `ReservaService`).
+
+## API alignment
+- Match Spring Boot JSON field names (`camelCase` DTOs): e.g. `customerName`, `date`, `time`, `service`, `status`.

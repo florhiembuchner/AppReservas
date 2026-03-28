@@ -1,0 +1,77 @@
+<section class="create">
+  <header class="create__header">
+    <h1>Nueva reserva</h1>
+    <a routerLink="/reservas" class="create__back">← Volver al listado</a>
+  </header>
+
+  <form class="create__form" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+    <div class="field">
+      <label class="field__label" for="nombreCliente">Nombre del cliente</label>
+      <input
+        id="nombreCliente"
+        class="field__input"
+        type="text"
+        formControlName="nombreCliente"
+        autocomplete="name"
+        [attr.aria-invalid]="form.controls.nombreCliente.invalid && form.controls.nombreCliente.touched"
+      />
+      @if (form.controls.nombreCliente.touched && form.controls.nombreCliente.hasError('required')) {
+        <p class="field__error" role="alert">Este campo es obligatorio.</p>
+      }
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label class="field__label" for="fecha">Fecha</label>
+        <input
+          id="fecha"
+          class="field__input"
+          type="date"
+          formControlName="fecha"
+          [attr.aria-invalid]="form.controls.fecha.invalid && form.controls.fecha.touched"
+        />
+        @if (form.controls.fecha.touched && form.controls.fecha.hasError('required')) {
+          <p class="field__error" role="alert">Este campo es obligatorio.</p>
+        }
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="hora">Hora</label>
+        <input
+          id="hora"
+          class="field__input"
+          type="time"
+          formControlName="hora"
+          [attr.aria-invalid]="form.controls.hora.invalid && form.controls.hora.touched"
+        />
+        @if (form.controls.hora.touched && form.controls.hora.hasError('required')) {
+          <p class="field__error" role="alert">Este campo es obligatorio.</p>
+        }
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="field__label" for="servicio">Servicio</label>
+      <select
+        id="servicio"
+        class="field__input"
+        formControlName="servicio"
+        [attr.aria-invalid]="form.controls.servicio.invalid && form.controls.servicio.touched"
+      >
+        <option value="" disabled>Seleccione un servicio</option>
+        @for (s of availableServices; track s) {
+          <option [value]="s">{{ s }}</option>
+        }
+      </select>
+      @if (form.controls.servicio.touched && form.controls.servicio.hasError('required')) {
+        <p class="field__error" role="alert">Debe elegir un servicio.</p>
+      }
+    </div>
+
+    <div class="create__actions">
+      <button type="submit" class="btn btn--primary" [disabled]="saving">
+        {{ saving ? 'Guardando…' : 'Guardar reserva' }}
+      </button>
+    </div>
+  </form>
+</section>

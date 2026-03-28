@@ -29,14 +29,26 @@ Apply these rules in all tasks for this repository.
 - Validate inputs early and fail fast with explicit exceptions.
 - Add/maintain unit and integration tests for business logic and endpoints.
 
-## Expected project structure
-- `reservation-backend/src/main/java/.../config` -> Spring configuration and beans.
-- `reservation-backend/src/main/java/.../controller` -> REST controllers.
-- `reservation-backend/src/main/java/.../service` -> business use cases.
-- `reservation-backend/src/main/java/.../repository` -> Spring Data repositories.
-- `reservation-backend/src/main/java/.../entity` -> JPA entities.
-- `reservation-backend/src/main/java/.../dto` -> request/response DTOs as `record`.
-- `reservation-backend/src/main/java/.../mapper` -> entity/DTO mappings.
-- `reservation-backend/src/main/java/.../exception` -> domain and API exception handling.
-- `reservation-backend/src/main/resources` -> `application.properties`, SQL/migration resources.
-- `reservation-backend/src/test/java` -> unit and integration tests.
+## Package layout (source tree)
+
+Use one base Java package for the application and **mirror the package name in the folder path** (e.g. `.../reservation_backend/service/MyService.java` for `...reservation_backend.service`).
+
+**Base package:** `com.florhiembuchner.web.reservation_backend` (only the main application class may sit directly under this package).
+
+| Subpackage (under base) | Folder path segment | Place here |
+|-------------------------|---------------------|------------|
+| `.config` | `config/` | `@Configuration` classes, `CorsFilter` and other web/security beans, property beans |
+| `.controller` | `controller/` | `@RestController` classes; HTTP mapping only |
+| `.service` | `service/` | `@Service` classes; business rules and `@Transactional` orchestration |
+| `.repository` | `repository/` | Spring Data interfaces (`JpaRepository`, etc.) |
+| `.entity` | `entity/` | JPA `@Entity` classes and enums used as persisted types |
+| `.dto` | `dto/` | Request/response `record`s and API payload models |
+| `.mapper` | `mapper/` | Mappers between entities and DTOs (manual or MapStruct) |
+| `.exception` | `exception/` | Domain exceptions, `@RestControllerAdvice`, shared error response types |
+
+Do not mix layers in one package (e.g. do not put entities under `service/`).
+
+## Non-Java resources and tests
+
+- `reservation-backend/src/main/resources` — `application.properties`, SQL scripts, Flyway/Liquibase migrations if used.
+- `reservation-backend/src/test/java` — mirror the main package tree for unit and integration tests (`...Test` / `...IT` next to or under parallel packages as the project convention dictates).
